@@ -96,12 +96,16 @@ module DeviseTokenAuth
         @resource.save!
         yield @resource if block_given?
 
-        redirect_to(@resource.build_auth_url(params[:redirect_url], {
-          token:          token,
-          client_id:      client_id,
+
+        render json: {
+          success: true,
+          'access-token' => token,
+          client: client_id,
+          uid: @resource.uid,
           reset_password: true,
-          config:         params[:config]
-        }))
+          config: params[:config]
+        }, status: 200
+
       else
         render_edit_error
       end
